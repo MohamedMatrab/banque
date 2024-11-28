@@ -1,6 +1,7 @@
 package com.gestion.banque.controllers;
 
 import com.gestion.banque.entity.User;
+import com.gestion.banque.repository.UserRepository;
 import com.gestion.banque.services.UserService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,10 +24,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AuthController {
 
     private final UserService userService;
+    private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
 
-    public AuthController(UserService userService, AuthenticationManager authenticationManager) {
+    public AuthController(UserService userService, UserRepository userRepository, AuthenticationManager authenticationManager) {
         this.userService = userService;
+        this.userRepository = userRepository;
         this.authenticationManager = authenticationManager;
     }
 
@@ -67,10 +70,14 @@ public class AuthController {
                 System.out.println(authority.getAuthority());
             }
 
+            System.out.println(authentication.getDetails());
             // Vérification des rôles et redirection appropriée
             if (authentication.getAuthorities().stream()
                     .anyMatch(authority -> authority.getAuthority().equals("ROLE_USER"))) {
-                return "redirect:/dashboard";  // Redirige vers le dashboard pour ROLE_USER
+
+                User _user = userRepository.findByLogin(user.getLogin()).orElseThrow(() -> new RuntimeException("Role not found"));;
+                System.out.println(_user.getClient().getId());
+                return "redirect:/clients/home/"+_user.getClient().getId();  // Redirige vers le dashboard pour ROLE_USER
             } else if (authentication.getAuthorities().stream()
                     .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"))) {
                 return "redirect:/clients";  // Redirige vers la page des clients pour ROLE_ADMIN
@@ -86,9 +93,9 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/dashboard")
-    public String home() {
-        return "dashboard";
+    @GetMapping("/logout")
+    public  String logout(){
+        return "redirect:/";
     }
 
 }
