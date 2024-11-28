@@ -1,15 +1,15 @@
 package com.gestion.banque.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 public class Client {
     @Id
-    private String id;  // ID de type GUID (UUID)
+    private String id;
 
     @NotBlank(message = "Le nom est obligatoire")
     private String nom;
@@ -20,25 +20,20 @@ public class Client {
     @NotBlank(message = "L'email est obligatoire")
     private String email;
 
-    public int getAge() {
-        return age;
-    }
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Transaction> sentTransactions;
 
-    public void setAge(int age) {
-        this.age = age;
-    }
+    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Transaction> receivedTransactions;
 
     private int age;
-
     private double solde;
 
-    // Constructeur par défaut : Génération automatique de l'ID
     public Client() {
         this.id = UUID.randomUUID().toString();
     }
 
-    // Constructeur personnalisé
-    public Client(String nom, String prenom, String email, double solde,int age) {
+    public Client(String nom, String prenom, String email, double solde, int age) {
         this.id = UUID.randomUUID().toString();
         this.nom = nom;
         this.prenom = prenom;
@@ -47,7 +42,23 @@ public class Client {
         this.age = age;
     }
 
-    // Getters et Setters
+    // Getters and setters
+    public List<Transaction> getSentTransactions() {
+        return sentTransactions;
+    }
+
+    public void setSentTransactions(List<Transaction> sentTransactions) {
+        this.sentTransactions = sentTransactions;
+    }
+
+    public List<Transaction> getReceivedTransactions() {
+        return receivedTransactions;
+    }
+
+    public void setReceivedTransactions(List<Transaction> receivedTransactions) {
+        this.receivedTransactions = receivedTransactions;
+    }
+
     public String getId() {
         return id;
     }
@@ -87,5 +98,12 @@ public class Client {
     public void setSolde(double solde) {
         this.solde = solde;
     }
-}
 
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+}

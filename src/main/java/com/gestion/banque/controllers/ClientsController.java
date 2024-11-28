@@ -27,7 +27,7 @@ public class ClientsController {
     public String add(@ModelAttribute("client") Client client, Model model, RedirectAttributes redirectAttributes) {
         try {
             clientService.saveClient(client);
-            redirectAttributes.addAttribute("message", "Client ajouté avec succès !");
+            redirectAttributes.addFlashAttribute("message", "Client ajouté avec succès !");
             return "redirect:/clients";
         }
         catch (Exception e) {
@@ -36,7 +36,6 @@ public class ClientsController {
             return "add_client";
         }
     }
-
 
     @GetMapping("")
     public String clientsList(Model model) {
