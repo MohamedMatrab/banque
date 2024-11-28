@@ -40,16 +40,16 @@ public class DataInitializer implements CommandLineRunner {
         // Vérifiez si des utilisateurs existent, sinon les ajouter
         if (userRepository.count() == 0) {
             Optional<Role> optionalRole = roleRepository.findByName("ROLE_ADMIN");
-            Optional<Role> optionalRole2 = roleRepository.findByName("ROLE_USER");
+            // Optional<Role> optionalRole2 = roleRepository.findByName("ROLE_USER");
 
             Role adminRole = optionalRole.orElseThrow(() -> new RuntimeException("Role not found"));
-            Role userRole = optionalRole2.orElseThrow(() -> new RuntimeException("Role not found"));
+            //  Role userRole = optionalRole2.orElseThrow(() -> new RuntimeException("Role not found"));
 
             // Encodez le mot de passe avant de l'enregistrer
             String encodedPassword = passwordEncoder.encode("admin123@");
 
             // Créez l'utilisateur avec le mot de passe encodé
-            User admin = new User("admin", encodedPassword, List.of(adminRole, userRole), null);
+            User admin = new User("admin", encodedPassword, List.of(adminRole), null);
 
             userRepository.save(admin);
         }

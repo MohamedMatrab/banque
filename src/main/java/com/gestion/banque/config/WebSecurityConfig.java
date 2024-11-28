@@ -56,7 +56,7 @@ public class WebSecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Assure la gestion de session
                 );
 
-        ;
+
 
         http.cors(c->c.disable());
         http.csrf(c->c.disable());
