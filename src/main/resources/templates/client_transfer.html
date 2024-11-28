@@ -60,15 +60,10 @@
             <!-- Champ caché pour l'ID de l'expéditeur -->
             <input type="hidden" name="senderId" th:value="${client.id}">
 
-            <!-- Sélection du client destinataire -->
+            <!-- Champ texte pour l'ID du destinataire -->
             <div class="mb-3">
-                <label for="receiverId" class="form-label">Destinataire</label>
-                <select id="receiverId" name="receiverId" class="form-select" required>
-                    <option th:each="otherClient : ${otherClients}"
-                            th:value="${otherClient.id}"
-                            th:text="${otherClient.nom} + ' ' + ${otherClient.prenom}">
-                    </option>
-                </select>
+                <label for="receiverId" class="form-label">Destinataire (ID)</label>
+                <input type="text" id="receiverId" name="receiverId" class="form-control" required placeholder="Entrez l'ID du destinataire">
             </div>
 
             <!-- Montant à transférer -->
@@ -93,7 +88,32 @@
             <a th:href="@{/transactions/{clientId}(clientId=${client.id})}" class="btn btn-secondary">
                 <i class="bi bi-clock-history"></i> Voir l'historique des transactions
             </a>
+        </div>
+        <div class="text-center mt-3">
+            <button class="btn bg-danger text-white" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <i class="bi bi-box-arrow-right"></i> Se déconnecter
+            </button>
+        </div>
+    </div>
+</div>
 
+<!-- Modal de confirmation -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel"> <i class="bi bi-check-circle text-primary"></i> Confirmation</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <i class="bi bi-question-circle text-primary"></i> Êtes-vous sûr de vouloir vous déconnecter ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Fermer</button>
+                <a th:href="@{/logout}" class="btn btn-success">
+                    valider
+                </a>
+            </div>
         </div>
     </div>
 </div>
