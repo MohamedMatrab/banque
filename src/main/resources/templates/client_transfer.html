@@ -3,57 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Transferer de l'argent</title>
+    <title>Accueil Client</title>
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .transfer-box {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            background-color: #ffffff;
+        }
+        .balance-box {
+            margin-top: 10px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-light">
 <div class="container mt-5">
-    <h1>Transférer de l'argent</h1>
+    <!-- Salutation -->
+    <div class="text-center mb-3">
+        <h1>Bienvenue, <span th:text="${client.nom} + ' ' + ${client.prenom}"></span>!</h1>
+        <p class="text-muted">Nous sommes heureux de vous revoir.</p>
+    </div>
 
-    <!-- Display any success or error messages -->
-    <div th:if="${message}" class="alert alert-info">
+    <!-- Affichage du solde -->
+    <div class="balance-box text-center">
+        <h4>Votre solde actuel</h4>
+        <p class="fs-4 text-success fw-bold">
+            <i class="bi bi-wallet2"></i>
+            <span th:text="${client.solde} + ' $'"></span>
+        </p>
+    </div>
+
+    <!-- Afficher le message si disponible -->
+    <div th:if="${message}" class="alert alert-info text-center mt-4">
         <strong th:text="${message}"></strong>
     </div>
-    <div th:if="${error}" class="alert alert-danger">
+
+    <!-- Afficher le message d'erreur si disponible -->
+    <div th:if="${error}" class="alert alert-danger text-center mt-4">
         <strong th:text="${error}"></strong>
     </div>
 
-    <form th:action="@{/transactions/save}" method="post">
-        <!-- Sender selection -->
-        <div class="mb-3">
-            <label for="senderId" class="form-label">Sélectionner l'expéditeur</label>
-            <select id="senderId" name="senderId" class="form-control" required>
-                <option >Choisir ici</option>
-                <option th:each="client : ${clients}"
-                        th:value="${client.id}"
-                        th:text="${client.nom + ' ' + client.prenom}"
-                        th:selected="${client.id == selectedSenderId}"></option>
-            </select>
+    <!-- Formulaire de transfert -->
+    <div class="transfer-box shadow-sm mt-4">
+        <h4 class="mb-4 text-center">Effectuer un transfert</h4>
+        <form th:action="@{/transactions/transfer-money}" method="post">
+            <!-- Champ caché pour l'ID de l'expéditeur -->
+            <input type="hidden" name="senderId" th:value="${client.id}">
+
+            <!-- Sélection du client destinataire -->
+            <div class="mb-3">
+                <label for="receiverId" class="form-label">Destinataire</label>
+                <select id="receiverId" name="receiverId" class="form-select" required>
+                    <option th:each="otherClient : ${otherClients}"
+                            th:value="${otherClient.id}"
+                            th:text="${otherClient.nom} + ' ' + ${otherClient.prenom}">
+                    </option>
+                </select>
+            </div>
+
+            <!-- Montant à transférer -->
+            <div class="mb-3">
+                <label for="amount" class="form-label">Montant à transférer</label>
+                <div class="input-group">
+                    <input type="number" id="amount" name="amount" class="form-control" min="0.01" step="0.01" required>
+                    <span class="input-group-text"><i class="bi bi-currency-dollar"></i></span>
+                </div>
+            </div>
+
+            <!-- Bouton de soumission -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mb-3">
+                    <i class="bi bi-arrow-right-circle"></i> Transférer
+                </button>
+            </div>
+        </form>
+
+        <!-- Bouton pour l'historique des transactions -->
+        <div class="text-center">
+            <a th:href="@{/transactions/{clientId}(clientId=${client.id})}" class="btn btn-secondary">
+                <i class="bi bi-clock-history"></i> Voir l'historique des transactions
+            </a>
+
         </div>
-
-        <!-- Receiver selection -->
-        <div class="mb-3">
-            <label for="receiverId" class="form-label">Sélectionner le destinataire</label>
-            <select id="receiverId" name="receiverId" class="form-control" required>
-                <option >Choisir ici</option>
-                <option th:each="client : ${clients}"
-                        th:value="${client.id}"
-                        th:text="${client.nom + ' ' + client.prenom}"
-                        th:selected="${client.id == selectedReceiverId}"></option>
-            </select>
-        </div>
-
-        <!-- Amount input -->
-        <div class="mb-3">
-            <label for="amount" class="form-label">Montant à transférer</label>
-            <input type="number" id="amount" name="amount" class="form-control" min="0.01" step="0.01" th:value="${amount}" required>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Effectuer transfer</button>
-    </form>
-
-    <br>
-    <a href="javascript:history.back()" class="btn btn-secondary">Annuler</a>
+    </div>
 </div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

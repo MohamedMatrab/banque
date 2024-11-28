@@ -69,6 +69,32 @@ public class TransactionController {
         }
     }
 
+    @PostMapping("/transfer-money")
+    public String transferClient(@RequestParam String senderId,
+                                  @RequestParam String receiverId,
+                                  @RequestParam BigDecimal amount,
+                                  Model model,
+                                  RedirectAttributes redirectAttributes) {
+        try {
+            transactionService.addTransaction(senderId, receiverId, amount);
+            redirectAttributes.addFlashAttribute("message", "Transaction effectué avec succès !");
+        }
+        catch (IllegalArgumentException e){
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+        catch (Exception e){
+            redirectAttributes.addFlashAttribute("error", "Erreur : Impossible d'ajouter le client. Veuillez réessayer.");
+        }
+        List<Client> otherClients = clientRepository.findByIdNot(senderId);
+        Client client = clientRepository.getReferenceById(senderId);
+
+        redirectAttributes.addFlashAttribute("receiverId", receiverId);
+        redirectAttributes.addFlashAttribute("client", client);
+        redirectAttributes.addFlashAttribute("otherClients", otherClients);
+        redirectAttributes.addAttribute("amount", amount);
+
+        return "redirect:/clients/home/"+senderId;
+    }
     @GetMapping("/{id}")
     public String showClientTransactions(@PathVariable String id, Model model, RedirectAttributes redirectAttributes) {
         try {

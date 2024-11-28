@@ -1,6 +1,7 @@
 package com.gestion.banque.controllers;
 
 import com.gestion.banque.entity.Client;
+import com.gestion.banque.repository.ClientRepository;
 import com.gestion.banque.services.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,8 @@ public class ClientsController {
 
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private ClientRepository clientRepository;
 
     @GetMapping("/new")
     public String addForm(Model model) {
@@ -74,4 +77,14 @@ public class ClientsController {
         return "redirect:/clients"; // Redirect back to clients list
     }
 
+    @GetMapping("/home/{id}")
+    public String home(Model model,@PathVariable String id) {
+        Client client = clientService.getById(id);
+
+        List<Client> otherClients = clientRepository.findByIdNot(id);
+
+        model.addAttribute("client", client);
+        model.addAttribute("otherClients", otherClients);
+        return "client_transfer";
+    }
 }
