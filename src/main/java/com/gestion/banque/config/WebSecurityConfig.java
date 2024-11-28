@@ -30,7 +30,7 @@ public class WebSecurityConfig {
     // Define the AuthenticationManager
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)throws  Exception {
-     return authenticationConfiguration.getAuthenticationManager();
+        return authenticationConfiguration.getAuthenticationManager();
     }
 
     // Configure HTTP security
@@ -38,7 +38,7 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/","/authentification","/static/**", "/images/**").permitAll()  // Public pages
+                        .requestMatchers("/","/authentification","/static/", "/images/").permitAll()  // Public pages
                         .anyRequest().permitAll()  // All other pages require authentication
                 )
                 .formLogin((form) -> form
@@ -47,11 +47,11 @@ public class WebSecurityConfig {
                         .permitAll()
                 )
                 .logout((logout) -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/index")  // Redirection après déconnexion
-                .invalidateHttpSession(true)
-                .clearAuthentication(true) // Supprimer l'authentification
-                .permitAll()).rememberMe(Customizer.withDefaults())
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/index")  // Redirection après déconnexion
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true) // Supprimer l'authentification
+                        .permitAll()).rememberMe(Customizer.withDefaults())
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED) // Assure la gestion de session
                 );
