@@ -18,6 +18,10 @@ public class Role {
         this.name = name;
     }
 
+    public Role() {
+        this.name = name;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
