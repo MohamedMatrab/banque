@@ -28,6 +28,14 @@
             </div>
         </div>
     </div>
+    <div class="d-flex justify-content-center">
+
+    <div th:if="${error}" style="color: red;">
+        <p class="text-white p-2 bg-danger" th:text="${error}"></p>
+    </div>
+
+    </div>
+
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog  modal-dialog-centered">
           <div class="modal-content">
@@ -36,16 +44,17 @@
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form class="bg-white p-2 rounded shadow">
+                <form class="bg-white p-4 rounded shadow" th:action="@{/authentification}" th:object="${utilisateur}" method="post">
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Login</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <label for="login" class="form-label">Login</label>
+                        <input type="text" th:field="*{login}" class="form-control" id="login" aria-describedby="loginHelp" placeholder="Entrez votre login" required>
                     </div>
                     <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1">
-                </div>
-                <button type="submit" class="btn btn-info text-white">Valider</button>
+                        <label for="password" class="form-label">Mot de passe</label>
+                        <input type="password" th:field="*{password}" class="form-control" id="password" placeholder="Entrez votre mot de passe" required>
+                    </div>
+                    <button type="submit" class="btn btn-info text-white w-100">Valider</button>
+                </form>
             </div>
           </div>
         </div>
