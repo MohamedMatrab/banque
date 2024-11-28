@@ -48,7 +48,7 @@ public class WebSecurityConfig {
                 )
                 .logout((logout) -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/index")  // Redirection après déconnexion
+                        .logoutSuccessUrl("/")  // Redirection après déconnexion
                         .invalidateHttpSession(true)
                         .clearAuthentication(true) // Supprimer l'authentification
                         .permitAll()).rememberMe(Customizer.withDefaults())
