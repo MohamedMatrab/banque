@@ -20,6 +20,16 @@ public class Client {
     @NotBlank(message = "L'email est obligatoire")
     private String email;
 
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    private int age;
+
     private double solde;
 
     // Constructeur par défaut : Génération automatique de l'ID
@@ -28,12 +38,13 @@ public class Client {
     }
 
     // Constructeur personnalisé
-    public Client(String nom, String prenom, String email, double solde) {
+    public Client(String nom, String prenom, String email, double solde,int age) {
         this.id = UUID.randomUUID().toString();
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
         this.solde = solde;
+        this.age = age;
     }
 
     // Getters et Setters
