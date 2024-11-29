@@ -43,6 +43,8 @@ public class ClientService {
         return clientRepository.findAll();
     }
     public void deleteClient(String id) {
+        Long userId = userRepository.getByClientId(id).getId();
+        userRepository.deleteById(userId);
         clientRepository.deleteById(id);
     }
     public Client getById(String id) {

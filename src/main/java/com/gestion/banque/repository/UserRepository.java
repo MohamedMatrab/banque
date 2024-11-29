@@ -11,5 +11,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     // Méthode pour trouver un utilisateur par son login
     Optional<User> findByLogin(String login);
-
+    User getByClientId(String clientId);
 }

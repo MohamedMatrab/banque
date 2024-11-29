@@ -39,7 +39,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/","/authentification","/static/", "/images/").permitAll()  // Public pages
-                        .anyRequest().permitAll()  // All other pages require authentication
+                        .anyRequest().authenticated()  // All other pages require authentication
                 )
                 .formLogin((form) -> form
                         .loginPage("/")
